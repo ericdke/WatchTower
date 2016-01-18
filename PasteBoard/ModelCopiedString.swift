@@ -8,8 +8,15 @@
 
 import Foundation
 
+// An object for the newly copied strings
 struct CopiedString {
+    
+    // Date and time of copy.
     var date:NSDate
+    
+    // The copied String.
     var content:String
+    
+    // The active application when the String was copied. 
     var source:ActiveApp
 }

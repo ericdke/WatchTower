@@ -8,6 +8,7 @@
 
 import Foundation
 
+// An active application seen by ours.
 struct ActiveApp: Hashable, Equatable {
     var name:String
     var bundleID:String

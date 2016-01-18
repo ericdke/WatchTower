@@ -8,6 +8,7 @@
 
 import Foundation
 
+// A delegate for when a String has been copied.
 protocol PasteboardWatcherDelegate {
     func newlyCopiedStringObtained(copied: CopiedString)
 }

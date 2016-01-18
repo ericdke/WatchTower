@@ -8,16 +8,22 @@
 
 import Foundation
 
+// An application that has been seen while ours is running.
 struct KnownApp: Hashable, Equatable {
+    
     var name:String
+    
     var bundleID:String
+    
     var hashValue:Int {
         return bundleID.hashValue
     }
+    
     init(name: String, bundleID: String) {
         self.name = name
         self.bundleID = bundleID
     }
+    
     init(activeApp: ActiveApp) {
         self.name = activeApp.name
         self.bundleID = activeApp.bundleID

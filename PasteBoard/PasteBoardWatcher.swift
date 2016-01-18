@@ -10,6 +10,8 @@ import Cocoa
 
 class PasteboardWatcher: NSObject {
     
+    static let sharedInstance = PasteboardWatcher()
+    
     private let pasteboard = NSPasteboard.generalPasteboard()
     
     private var changeCount: Int
@@ -27,11 +29,11 @@ class PasteboardWatcher: NSObject {
     override init() {
         self.changeCount = pasteboard.changeCount
         super.init()
-        // registers if any application becomes active (or comes frontmost) and calls a method if it's the case
+        // Registers if any application becomes active (or comes frontmost) and calls a method if it's the case.
         NSWorkspace.sharedWorkspace().notificationCenter.addObserver(self, selector: "activeApp:", name: NSWorkspaceDidActivateApplicationNotification, object: nil)
     }
     
-    // called by NSWorkspace when any application becomes active or comes frontmost
+    // Called by NSWorkspace when any application becomes active or comes frontmost.
     func activeApp(sender: NSNotification) {
         if let info = sender.userInfo,
             content = info[NSWorkspaceApplicationKey],
@@ -45,14 +47,16 @@ class PasteboardWatcher: NSObject {
         }
     }
     
-    // regularly polls the general pasteboard to see if there's been changes
-    // not very pretty, but this is how Apple does it themselves, so...
+    // Regularly polls the general pasteboard to see if there's been changes.
+    // Not very pretty, but this is how Apple do it themselves, so...
     func startPolling() {
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: "checkForChangesInPasteboard", userInfo: nil, repeats: true)
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "checkForChangesInPasteboard", userInfo: nil, repeats: true)
     }
     
-    // called by the timer
-    // calls the delegate if there's been a change in the general pasteboard
+    // Called by the timer.
+    // If there's been a change in the general pasteboard:
+    // - Appends new strings to "copiedStrings"
+    // - Calls the delegate
     @objc private func checkForChangesInPasteboard() {
         if pasteboard.changeCount != changeCount {
             if let copiedString = pasteboard.stringForType(NSPasteboardTypeString),

@@ -13,11 +13,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
 
     @IBOutlet weak var window: NSWindow!
     
-    // instance of the pasteboard monitor ("watcher")
-    // contains the polling timer, known apps, the active app, and of courses the copied strings
-    let watcher = PasteboardWatcher()
+    // Instance of the pasteboard monitor ("watcher").
+    // Contains the polling timer, known apps, the active app, and of courses the copied strings.
+    let watcher = PasteboardWatcher.sharedInstance
     
-    // a delegate method called by the watcher
+    // A delegate method called by the watcher. Conforms to PasteboardWatcherDelegate.
     func newlyCopiedStringObtained(copied: CopiedString) {
         print(copied.source.name)
         print(copied.date)
@@ -31,7 +31,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         self.watcher.delegate = self
-        // start watching the general pasteboard
+        // Start watching the general pasteboard.
         self.watcher.startPolling()
     }
 

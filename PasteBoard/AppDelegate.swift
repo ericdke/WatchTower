@@ -28,8 +28,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
         print(watcher.knownApps)
         print("\n***\n")
     }
+    
+    // A delegate method for when any app becomes active.
+    func anAppDidBecomeActive(app: ActiveApp) {
+        print("Active app: \(app.name) (\(app.bundleID))")
+    }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
+        
+        // Populate the collection with data from previous run.
         if let content = NSUserDefaults().objectForKey("CopiedStrings") as? [String:[AnyObject]] {
             for (copiedString, items) in content {
                 if let bundle = items[0] as? String,
@@ -37,7 +44,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
                     date = items[2] as? Int {
                     let aa = ActiveApp(name: name, bundleID: bundle)
                     let d = NSDate(timeIntervalSince1970: NSTimeInterval(date))
-                    watcher.copiedStrings.append(CopiedString(date: d, content: copiedString, source: aa))
+                    watcher.copiedStrings.append(date: d, content: copiedString, source: aa)
                     watcher.knownApps.insert(KnownApp(activeApp: aa))
                 }
             }
@@ -51,6 +58,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
+        
+        // Record the current copied strings before quitting.
         let strings = NSMutableDictionary()
         for app in watcher.copiedStrings.allItems {
             strings[app.content] = NSArray(array: [app.source.bundleID, app.source.name, Int(app.date.timeIntervalSince1970)])

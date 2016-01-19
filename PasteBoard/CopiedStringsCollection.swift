@@ -40,6 +40,10 @@ class CopiedStringsCollection {
         collection.append(string)
     }
     
+    func append(date date: NSDate, content: String, source: ActiveApp) {
+        append(CopiedString(date: date, content: content, source: source))
+    }
+    
     func removeAtIndex(index: Int) {
         collection.removeAtIndex(index)
     }

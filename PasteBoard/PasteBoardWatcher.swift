@@ -10,26 +10,34 @@ import Cocoa
 
 class PasteboardWatcher: NSObject {
     
+    // This class is a Singleton.
     static let sharedInstance = PasteboardWatcher()
     
     private let pasteboard = NSPasteboard.generalPasteboard()
     
-    private var changeCount: Int
-    
-    private var timer: NSTimer?
-    
-    var knownApps = Set<KnownApp>()
-    
-    var activeApp:ActiveApp?
-    
-    //TODO: limit to 10 or 50 or 100 or x (configurable stack)
-    let copiedStrings = CopiedStringsCollection()
-    
     var delegate: PasteboardWatcherDelegate?
     
+    // Keep track of the changes in the pasteboard.
+    private var changeCount: Int
+    
+    // Used to regularly poll the pasteboard for changes.
+    private var timer: NSTimer?
+    
+    // A set of applications we've already copied from.
+    var knownApps = Set<KnownApp>()
+    
+    // The current active application.
+    var activeApp:ActiveApp?
+    
+    // The collection of copied strings.
+    let copiedStrings = CopiedStringsCollection()
+    
     override init() {
+        // On launch, we mirror the pasteboard context.
         self.changeCount = pasteboard.changeCount
+        
         super.init()
+        
         // Registers if any application becomes active (or comes frontmost) and calls a method if it's the case.
         NSWorkspace.sharedWorkspace().notificationCenter.addObserver(self, selector: "activeApp:", name: NSWorkspaceDidActivateApplicationNotification, object: nil)
     }
@@ -45,6 +53,7 @@ class PasteboardWatcher: NSObject {
                 let aa = ActiveApp(name: name, bundleID: bundle)
                 activeApp = aa
                 knownApps.insert(KnownApp(activeApp: aa))
+                delegate?.anAppDidBecomeActive(aa)
         }
     }
     
@@ -61,12 +70,12 @@ class PasteboardWatcher: NSObject {
     @objc private func checkForChangesInPasteboard() {
         if pasteboard.changeCount != changeCount {
             if let copiedString = pasteboard.stringForType(NSPasteboardTypeString),
-                active = self.activeApp {
+                active = activeApp {
                     let st = CopiedString(date: NSDate(), content: copiedString, source: active)
                     copiedStrings.append(st)
-                    self.delegate?.newlyCopiedStringObtained(st)
+                    delegate?.newlyCopiedStringObtained(st)
             }
-            self.changeCount = pasteboard.changeCount
+            changeCount = pasteboard.changeCount
         }
     }
 }

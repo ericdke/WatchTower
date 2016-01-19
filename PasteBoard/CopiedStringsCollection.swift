@@ -8,7 +8,7 @@
 
 import Foundation
 
-// A struct to replace `array`, implementing a capacity limit.
+// A struct to replace `array`, implementing a capacity limit and restricted privileges.
 class CopiedStringsCollection {
     
     // The maximum number of items in the collection.

@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
         }
         
         // Populate the forbidden applications.
-        if let content = NSUserDefaults().objectForKey("CopiedStrings") as? [String: String] {
+        if let content = NSUserDefaults().objectForKey("ForbiddenApps") as? [String: String] {
             for (bundle, name) in content {
                 let app = Application(name: name, bundleID: bundle)
                 if !watcher.forbiddenApps.contains(app) {

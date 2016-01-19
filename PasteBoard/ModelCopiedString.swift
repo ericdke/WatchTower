@@ -22,5 +22,6 @@ struct CopiedString: CustomStringConvertible {
     
     var description: String {
         return "\"\(content)\" - \(source.name) - \(date)"
+        
     }
 }

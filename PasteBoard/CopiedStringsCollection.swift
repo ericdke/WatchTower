@@ -52,14 +52,15 @@ class CopiedStringsCollection {
         collection.removeLast()
     }
     
-    func getFirst() -> CopiedString? {
+    var first: CopiedString? {
         return collection.first
     }
     
-    func getLast() -> CopiedString? {
+    var last: CopiedString? {
         return collection.last
     }
     
+    // Safe way to retrieve an item: returns an Optional.
     func getAtIndex(index: Int) -> CopiedString? {
         if collection.count > index {
             return collection[index]
@@ -67,12 +68,20 @@ class CopiedStringsCollection {
         return nil
     }
     
-    func getAll() -> [CopiedString] {
+    var allItems: [CopiedString] {
         return collection
     }
     
-    func sortCollection() {
+    func sortByDate() {
         collection.sortInPlace { $0.date.timeIntervalSince1970 > $1.date.timeIntervalSince1970 }
+    }
+    
+    func sortByContent() {
+        collection.sortInPlace { $0.content < $1.content }
+    }
+    
+    func sortBySource() {
+        collection.sortInPlace { $0.source < $1.source }
     }
     
 }

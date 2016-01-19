@@ -20,3 +20,11 @@ struct ActiveApp: Hashable, Equatable {
 func ==(lhs: ActiveApp, rhs: ActiveApp) -> Bool {
     return lhs.hashValue == rhs.hashValue
 }
+
+func <(lhs: ActiveApp, rhs: ActiveApp) -> Bool {
+    return lhs.hashValue < rhs.hashValue
+}
+
+func >(lhs: ActiveApp, rhs: ActiveApp) -> Bool {
+    return lhs.hashValue > rhs.hashValue
+}

@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
         print(copied.date)
         print(copied.content)
         print("---")
-        print(watcher.copiedStrings.getAll())
+        print(watcher.copiedStrings.allItems)
         print("---")
         print(watcher.knownApps)
         print("\n***\n")
@@ -41,7 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
                     watcher.knownApps.insert(KnownApp(activeApp: aa))
                 }
             }
-            watcher.copiedStrings.sortCollection()
+            watcher.copiedStrings.sortByDate()
         }
         
         watcher.delegate = self
@@ -52,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
 
     func applicationWillTerminate(aNotification: NSNotification) {
         let strings = NSMutableDictionary()
-        for app in watcher.copiedStrings.getAll() {
+        for app in watcher.copiedStrings.allItems {
             strings[app.content] = NSArray(array: [app.source.bundleID, app.source.name, Int(app.date.timeIntervalSince1970)])
         }
         NSUserDefaults().setObject(strings, forKey: "CopiedStrings")

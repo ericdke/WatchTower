@@ -22,7 +22,8 @@ class PasteboardWatcher: NSObject {
     
     var activeApp:ActiveApp?
     
-    var copiedStrings = [CopiedString]()
+    //TODO: limit to 10 or 50 or 100 or x (configurable stack)
+    let copiedStrings = CopiedStringsCollection()
     
     var delegate: PasteboardWatcherDelegate?
     

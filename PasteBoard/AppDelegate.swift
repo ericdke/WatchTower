@@ -13,8 +13,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
 
     @IBOutlet weak var window: NSWindow!
     
-    // Instance of the pasteboard monitor ("watcher").
-    // Contains the polling timer, known apps, the active app, and of courses the copied strings.
+    // Singleton instance of the pasteboard monitor (the "watcher").
+    // Contains the polling timer, known apps, the active app, and of course the copied strings.
     let watcher = PasteboardWatcher.sharedInstance
     
     // A delegate method called by the watcher. Conforms to PasteboardWatcherDelegate.
@@ -23,7 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
         print(copied.date)
         print(copied.content)
         print("---")
-        print(watcher.copiedStrings)
+        print(watcher.copiedStrings.getAll())
         print("---")
         print(watcher.knownApps)
         print("\n***\n")
@@ -41,17 +41,18 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
                     watcher.knownApps.insert(KnownApp(activeApp: aa))
                 }
             }
-            watcher.copiedStrings.sortInPlace { $0.date.timeIntervalSince1970 < $1.date.timeIntervalSince1970 }
+            watcher.copiedStrings.sortCollection()
         }
         
-        self.watcher.delegate = self
+        watcher.delegate = self
+        
         // Start watching the general pasteboard.
-        self.watcher.startPolling()
+        watcher.startPolling()
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
         let strings = NSMutableDictionary()
-        for app in watcher.copiedStrings {
+        for app in watcher.copiedStrings.getAll() {
             strings[app.content] = NSArray(array: [app.source.bundleID, app.source.name, Int(app.date.timeIntervalSince1970)])
         }
         NSUserDefaults().setObject(strings, forKey: "CopiedStrings")

@@ -40,7 +40,7 @@ class CopiedStringsCollection {
         collection.append(string)
     }
     
-    func append(date date: NSDate, content: String, source: ActiveApp) {
+    func append(date date: NSDate, content: String, source: Application) {
         append(CopiedString(date: date, content: content, source: source))
     }
     

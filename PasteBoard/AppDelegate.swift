@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     // Contains the polling timer, known apps, the active app, and of course the copied strings.
     let watcher = PasteboardWatcher.sharedInstance
     
-    // A delegate method called by the watcher. Conforms to PasteboardWatcherDelegate.
+    // A delegate method for when a String has been copied.
     func newlyCopiedStringObtained(copied: CopiedString) {
         print(copied.source.name)
         print(copied.date)
@@ -30,8 +30,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     }
     
     // A delegate method for when any app becomes active.
-    func anAppDidBecomeActive(app: ActiveApp) {
-        print("Active app: \(app.name) (\(app.bundleID))")
+    func anAppDidBecomeActive(app: Application) {
+        print("Active app: \(app.name) - \(app.bundleID)")
     }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
@@ -42,13 +42,23 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
                 if let bundle = items[0] as? String,
                     name = items[1] as? String,
                     date = items[2] as? Int {
-                    let aa = ActiveApp(name: name, bundleID: bundle)
+                    let aa = Application(name: name, bundleID: bundle)
                     let d = NSDate(timeIntervalSince1970: NSTimeInterval(date))
                     watcher.copiedStrings.append(date: d, content: copiedString, source: aa)
-                    watcher.knownApps.insert(KnownApp(activeApp: aa))
+                    watcher.knownApps.insert(aa)
                 }
             }
             watcher.copiedStrings.sortByDate()
+        }
+        
+        // Populate the forbidden applications.
+        if let content = NSUserDefaults().objectForKey("CopiedStrings") as? [String: String] {
+            for (bundle, name) in content {
+                let app = Application(name: name, bundleID: bundle)
+                if !watcher.forbiddenApps.contains(app) {
+                    watcher.forbiddenApps.append(app)
+                }
+            }
         }
         
         watcher.delegate = self
@@ -65,6 +75,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
             strings[app.content] = NSArray(array: [app.source.bundleID, app.source.name, Int(app.date.timeIntervalSince1970)])
         }
         NSUserDefaults().setObject(strings, forKey: "CopiedStrings")
+        
+        // Record the forbidden applications.
+        let fapps = NSMutableDictionary()
+        for app in watcher.forbiddenApps {
+            fapps[app.bundleID] = app.name
+        }
+        NSUserDefaults().setObject(fapps, forKey: "ForbiddenApps")
     }
 
 

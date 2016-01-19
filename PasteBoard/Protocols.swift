@@ -6,7 +6,7 @@
 //  Copyright © 2016 tests. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 protocol PasteboardWatcherDelegate {
 
@@ -14,7 +14,30 @@ protocol PasteboardWatcherDelegate {
     func newlyCopiedStringObtained(copied: CopiedString)
     
     // A delegate method for when any app becomes active.
-    func anAppDidBecomeActive(app: ActiveApp)
+    func anAppDidBecomeActive(app: Application)
     
 }
 
+protocol RepresentsAnApplication {
+    
+    var name: String { get set }
+    
+    var bundleID: String  { get set }
+    
+    var icon: NSImage?  { get set }
+    
+    var hashValue: Int { get }
+    
+}
+
+extension RepresentsAnApplication {
+    
+    var hashValue: Int {
+        return bundleID.hashValue
+    }
+    
+    var description: String {
+        return "\(name) - \(bundleID)"
+    }
+    
+}

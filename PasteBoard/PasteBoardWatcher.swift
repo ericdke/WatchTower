@@ -24,10 +24,13 @@ class PasteboardWatcher: NSObject {
     private var timer: NSTimer?
     
     // A set of applications we've already copied from.
-    var knownApps = Set<KnownApp>()
+    var knownApps = Set<Application>()
     
     // The current active application.
-    var activeApp:ActiveApp?
+    var activeApp:Application?
+    
+    // Applications we won't copy from.
+    var forbiddenApps = [Application(name: "1Password", bundleID: "com.agilebits.onepassword-osx")]
     
     // The collection of copied strings.
     let copiedStrings = CopiedStringsCollection()
@@ -50,9 +53,9 @@ class PasteboardWatcher: NSObject {
             name = tn,
             tb = content.bundleIdentifier,
             bundle = tb {
-                let aa = ActiveApp(name: name, bundleID: bundle)
+                let aa = Application(name: name, bundleID: bundle)
                 activeApp = aa
-                knownApps.insert(KnownApp(activeApp: aa))
+                knownApps.insert(aa)
                 delegate?.anAppDidBecomeActive(aa)
         }
     }

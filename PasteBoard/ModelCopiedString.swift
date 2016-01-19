@@ -9,7 +9,7 @@
 import Foundation
 
 // An object for the newly copied strings
-struct CopiedString {
+struct CopiedString: CustomStringConvertible {
     
     // Date and time of copy.
     var date:NSDate
@@ -18,5 +18,9 @@ struct CopiedString {
     var content:String
     
     // The active application when the String was copied. 
-    var source:ActiveApp
+    var source:Application
+    
+    var description: String {
+        return "\"\(content)\" - \(source.name) - \(date)"
+    }
 }

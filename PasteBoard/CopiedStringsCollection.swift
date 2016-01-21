@@ -8,7 +8,8 @@
 
 import Foundation
 
-// A struct to replace `array`, implementing a capacity limit and restricted privileges.
+// A struct to replace `array`, to implement a capacity limit and restricted privileges.
+// TODO: it's rather prototypal and probably not optimal, it may have to change in the future.
 class CopiedStringsCollection {
     
     // The maximum number of items in the collection.
@@ -32,7 +33,7 @@ class CopiedStringsCollection {
     }
     
     // Append a CopiedString.
-    // Removes the first item before inserting if the collection is full.
+    // Removes the first item before appending if the collection is full.
     func append(string: CopiedString) {
         if collection.count >= limit {
             collection.removeFirst()
@@ -40,10 +41,12 @@ class CopiedStringsCollection {
         collection.append(string)
     }
     
+    // For convenience.
     func append(date date: NSDate, content: String, source: Application) {
         append(CopiedString(date: date, content: content, source: source))
     }
     
+    // We will need those later...
     func removeAtIndex(index: Int) {
         collection.removeAtIndex(index)
     }
@@ -72,20 +75,15 @@ class CopiedStringsCollection {
         return nil
     }
     
+    // All items in the order they were added
+    // (they could have been appended or inserted - we will allow moving items in lists).
     var allItems: [CopiedString] {
         return collection
     }
     
-    func sortByDate() {
-        collection.sortInPlace { $0.date.timeIntervalSince1970 > $1.date.timeIntervalSince1970 }
-    }
-    
-    func sortByContent() {
-        collection.sortInPlace { $0.content < $1.content }
-    }
-    
-    func sortBySource() {
-        collection.sortInPlace { $0.source < $1.source }
+    // All items sorted by creation date.
+    var sortedItems: [CopiedString] {
+        return collection.sort { $0.date < $1.date }
     }
     
 }

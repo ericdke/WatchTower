@@ -22,8 +22,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
         print(copied.source.name)
         print(copied.date)
         print(copied.content)
+        if !copied.URLs.isEmpty {
+            print(copied.URLs)
+        }
         print("---")
-        print(watcher.copiedStrings.allItems)
+        print(watcher.copiedStrings.sortedItems)
+        print(watcher.copiedStrings.allItems.count)
         print("---")
         print(watcher.knownApps)
         print("\n***\n")
@@ -48,7 +52,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
                     watcher.knownApps.insert(aa)
                 }
             }
-            watcher.copiedStrings.sortByDate()
         }
         
         // Populate the forbidden applications.
@@ -68,10 +71,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
+        // NSUSerDefaults for now - might need to use NSCoding instead later if we add complexity.
         
         // Record the current copied strings before quitting.
         let strings = NSMutableDictionary()
-        for app in watcher.copiedStrings.allItems {
+        for app in watcher.copiedStrings.sortedItems {
             strings[app.content] = NSArray(array: [app.source.bundleID, app.source.name, Int(app.date.timeIntervalSince1970)])
         }
         NSUserDefaults().setObject(strings, forKey: "CopiedStrings")

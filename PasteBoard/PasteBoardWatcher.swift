@@ -56,12 +56,17 @@ class PasteboardWatcher: NSObject {
                 let aa = Application(name: name, bundleID: bundle)
                 activeApp = aa
                 knownApps.insert(aa)
-                delegate?.anAppDidBecomeActive(aa)
+                if let delegate = delegate {
+                    delegate.anAppDidBecomeActive(aa)
+                } else {
+                    print("ERROR The PBDelegate didn't work.")
+                }
+                
         }
     }
     
     // Regularly polls the general pasteboard to see if there's been changes.
-    // Not very pretty, but this is how Apple do it themselves, so...
+    // Not very pretty, but even Apple does it like this, so let's go.
     func startPolling() {
         self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "checkForChangesInPasteboard", userInfo: nil, repeats: true)
     }
@@ -70,13 +75,18 @@ class PasteboardWatcher: NSObject {
     // If there's been a change in the general pasteboard:
     // - Appends new strings to "copiedStrings"
     // - Calls the delegate
+    // Has to be marked @objc because it's private *and* called by NSTimer.
     @objc private func checkForChangesInPasteboard() {
         if pasteboard.changeCount != changeCount {
             if let copiedString = pasteboard.stringForType(NSPasteboardTypeString),
                 active = activeApp {
                     let st = CopiedString(date: NSDate(), content: copiedString, source: active)
                     copiedStrings.append(st)
-                    delegate?.newlyCopiedStringObtained(st)
+                    if let delegate = delegate {
+                        delegate.newlyCopiedStringObtained(st)
+                    } else {
+                        print("ERROR The PBDelegate didn't work.")
+                    }
             }
             changeCount = pasteboard.changeCount
         }

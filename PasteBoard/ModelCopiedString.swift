@@ -12,16 +12,26 @@ import Foundation
 struct CopiedString: CustomStringConvertible {
     
     // Date and time of copy.
-    var date:NSDate
+    let date:NSDate
     
     // The copied String.
-    var content:String
+    let content:String
     
     // The active application when the String was copied. 
-    var source:Application
+    let source:Application
+    
+    // If the content contains URLs, this array will be populated.
+    let URLs: [NSURL]
+    
+    init(date: NSDate, content: String, source: Application) {
+        self.date = date
+        self.content = content
+        self.source = source
+        self.URLs = content.extractURLs()
+    }
     
     var description: String {
         return "\"\(content)\" - \(source.name) - \(date)"
-        
     }
+    
 }

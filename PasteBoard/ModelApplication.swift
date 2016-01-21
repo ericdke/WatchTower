@@ -28,14 +28,3 @@ struct Application: Hashable, Equatable, CustomStringConvertible, RepresentsAnAp
     }
 }
 
-func ==(lhs: Application, rhs: Application) -> Bool {
-    return lhs.hashValue == rhs.hashValue
-}
-
-func <(lhs: Application, rhs: Application) -> Bool {
-    return lhs.hashValue < rhs.hashValue
-}
-
-func >(lhs: Application, rhs: Application) -> Bool {
-    return lhs.hashValue > rhs.hashValue
-}

@@ -30,10 +30,14 @@ class PasteboardWatcher: NSObject {
     var activeApp:Application?
     
     // Applications we won't copy from.
-    var forbiddenApps = [Application(name: "1Password", bundleID: "com.agilebits.onepassword-osx")]
+    var forbiddenApps = [Application(name: "1Password", bundleID: "com.agilebits.onepassword-osx"),
+                         Application(name: "1Pasword mini", bundleID: "2BUA8C4S2C.com.agilebits.onepassword-osx-helper")]
     
     // The collection of copied strings.
     let copiedStrings = CopiedStringsCollection()
+    
+    // The collection of copied images.
+    let copiedImages = CopiedImagesCollection()
     
     override init() {
         // On launch, we mirror the pasteboard context.
@@ -49,17 +53,15 @@ class PasteboardWatcher: NSObject {
     func activeApp(sender: NSNotification) {
         if let info = sender.userInfo,
             content = info[NSWorkspaceApplicationKey],
-            tn = content.localizedName,
-            name = tn,
-            tb = content.bundleIdentifier,
-            bundle = tb {
+            _name = content.localizedName, _bundle = content.bundleIdentifier,
+            name = _name, bundle = _bundle {
                 let aa = Application(name: name, bundleID: bundle)
                 activeApp = aa
                 knownApps.insert(aa)
                 if let delegate = delegate {
-                    delegate.anAppDidBecomeActive(aa)
+                    delegate.anAppBecameActive(aa)
                 } else {
-                    print("ERROR The PBDelegate didn't work.")
+                    fatalError() // WIP
                 }
                 
         }
@@ -73,22 +75,70 @@ class PasteboardWatcher: NSObject {
     
     // Called by the timer.
     // If there's been a change in the general pasteboard:
-    // - Appends new strings to "copiedStrings"
-    // - Calls the delegate
+    // - If the active application is forbidden: only updates the count.
+    // - Appends new strings to "copiedStrings".
+    // - Calls the delegate.
     // Has to be marked @objc because it's private *and* called by NSTimer.
+    // TODO: Learn to also copy other types than Strings.
     @objc private func checkForChangesInPasteboard() {
         if pasteboard.changeCount != changeCount {
-            if let copiedString = pasteboard.stringForType(NSPasteboardTypeString),
-                active = activeApp {
-                    let st = CopiedString(date: NSDate(), content: copiedString, source: active)
-                    copiedStrings.append(st)
-                    if let delegate = delegate {
-                        delegate.newlyCopiedStringObtained(st)
-                    } else {
-                        print("ERROR The PBDelegate didn't work.")
+            
+            changeCount = pasteboard.changeCount
+            
+            print(pasteboard.types!)
+//            if let test = pasteboard.stringForType("public.utf8-plain-text") {
+//                print(test)
+//            } else {
+//                print("no")
+//            }
+//          
+
+            // Get a string. If it is an URL or contains URLs it will be managed by the final object.
+            // NSPasteboardTypeString would be ideal but is forbidden with Sandbox (damn you Sandbox).
+            if let copiedString = pasteboard.stringForType("public.utf8-plain-text") {
+                foundAString(copiedString)
+            // Because WIP and fuck DRY for once...
+            // This one looks equivalent and looks like is not forbidden.
+            } else if let copiedString = pasteboard.stringForType(NSStringPboardType) {
+                foundAString(copiedString)
+            // Better than nothing, eh.
+            } else if let copiedString = pasteboard.stringForType("public.utf16-external-plain-text") {
+                foundAString(copiedString)
+            }
+            
+            // Get a filename (or a multiple selection of filenames) with full path.
+            if let plist = pasteboard.propertyListForType(NSFilenamesPboardType),
+                paths = plist as? [String] {
+                    for path in paths {
+                        foundAString(path)
                     }
             }
-            changeCount = pasteboard.changeCount
+            
+            // Get an image or a multiple selection of images.
+            if let images = pasteboard.readObjectsForClasses([NSImage.self], options: nil) as? [NSImage] {
+                for image in images {
+                    foundAnImage(image)
+                }
+            }
         }
     }
+    
+    private func foundAString(string: String) {
+        if let source = activeApp where !forbiddenApps.contains(source) {
+            let st = CopiedString(string, source: source)
+            copiedStrings.append(st)
+            if let delegate = delegate {
+                delegate.newlyCopiedStringObtained(st)
+            } else {
+                fatalError() // WIP
+            }
+        }
+    }
+    
+    private func foundAnImage(image: NSImage) {
+        if let source = activeApp where !forbiddenApps.contains(source) {
+            copiedImages.append(CopiedImage(image, source: source))
+        }
+    }
+    
 }

@@ -11,6 +11,8 @@
 		06D7AEB01C4CF9040017FD1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 06D7AEAF1C4CF9040017FD1B /* Assets.xcassets */; };
 		06D7AEB31C4CF9040017FD1B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06D7AEB11C4CF9040017FD1B /* MainMenu.xib */; };
 		06D7AEBB1C4D09E10017FD1B /* PasteBoardWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D7AEBA1C4D09E10017FD1B /* PasteBoardWatcher.swift */; };
+		C71533B11C52F4F600E26956 /* ModelCopiedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71533B01C52F4F600E26956 /* ModelCopiedImage.swift */; };
+		C71533B31C52FC1B00E26956 /* CopiedImagesCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C71533B21C52FC1B00E26956 /* CopiedImagesCollection.swift */; };
 		C74609FB1C4D712200B6C200 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74609FA1C4D712200B6C200 /* Protocols.swift */; };
 		C74609FD1C4D714B00B6C200 /* ModelCopiedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74609FC1C4D714B00B6C200 /* ModelCopiedString.swift */; };
 		C74609FF1C4D716000B6C200 /* ModelApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74609FE1C4D716000B6C200 /* ModelApplication.swift */; };
@@ -25,6 +27,9 @@
 		06D7AEB21C4CF9040017FD1B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		06D7AEB41C4CF9040017FD1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		06D7AEBA1C4D09E10017FD1B /* PasteBoardWatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasteBoardWatcher.swift; sourceTree = "<group>"; };
+		C71533AF1C52ED0200E26956 /* PasteBoard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PasteBoard.entitlements; sourceTree = "<group>"; };
+		C71533B01C52F4F600E26956 /* ModelCopiedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelCopiedImage.swift; sourceTree = "<group>"; };
+		C71533B21C52FC1B00E26956 /* CopiedImagesCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopiedImagesCollection.swift; sourceTree = "<group>"; };
 		C74609FA1C4D712200B6C200 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		C74609FC1C4D714B00B6C200 /* ModelCopiedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelCopiedString.swift; sourceTree = "<group>"; };
 		C74609FE1C4D716000B6C200 /* ModelApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelApplication.swift; sourceTree = "<group>"; };
@@ -62,11 +67,14 @@
 		06D7AEAC1C4CF9040017FD1B /* PasteBoard */ = {
 			isa = PBXGroup;
 			children = (
+				C71533AF1C52ED0200E26956 /* PasteBoard.entitlements */,
 				06D7AEAD1C4CF9040017FD1B /* AppDelegate.swift */,
 				06D7AEBA1C4D09E10017FD1B /* PasteBoardWatcher.swift */,
 				C7460A021C4EB3D800B6C200 /* CopiedStringsCollection.swift */,
+				C71533B21C52FC1B00E26956 /* CopiedImagesCollection.swift */,
 				C74609FE1C4D716000B6C200 /* ModelApplication.swift */,
 				C74609FC1C4D714B00B6C200 /* ModelCopiedString.swift */,
+				C71533B01C52F4F600E26956 /* ModelCopiedImage.swift */,
 				C7E99BEA1C5189A7002179E3 /* Extensions.swift */,
 				C74609FA1C4D712200B6C200 /* Protocols.swift */,
 				06D7AEAF1C4CF9040017FD1B /* Assets.xcassets */,
@@ -108,6 +116,11 @@
 				TargetAttributes = {
 					06D7AEA91C4CF9040017FD1B = {
 						CreatedOnToolsVersion = 7.3;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -147,9 +160,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				C74609FB1C4D712200B6C200 /* Protocols.swift in Sources */,
+				C71533B11C52F4F600E26956 /* ModelCopiedImage.swift in Sources */,
 				C7460A031C4EB3D800B6C200 /* CopiedStringsCollection.swift in Sources */,
 				06D7AEAE1C4CF9040017FD1B /* AppDelegate.swift in Sources */,
 				C7E99BEB1C5189A7002179E3 /* Extensions.swift in Sources */,
+				C71533B31C52FC1B00E26956 /* CopiedImagesCollection.swift in Sources */,
 				C74609FF1C4D716000B6C200 /* ModelApplication.swift in Sources */,
 				C74609FD1C4D714B00B6C200 /* ModelCopiedString.swift in Sources */,
 				06D7AEBB1C4D09E10017FD1B /* PasteBoardWatcher.swift in Sources */,
@@ -254,6 +269,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PasteBoard/PasteBoard.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = PasteBoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
@@ -266,6 +282,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PasteBoard/PasteBoard.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = PasteBoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";

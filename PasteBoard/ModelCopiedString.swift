@@ -23,7 +23,7 @@ struct CopiedString: CustomStringConvertible {
     // If the content contains URLs, this array will be populated.
     let URLs: [NSURL]
     
-    init(date: NSDate, content: String, source: Application) {
+    init(_ content: String, source: Application, date: NSDate = NSDate()) {
         self.date = date
         self.content = content
         self.source = source

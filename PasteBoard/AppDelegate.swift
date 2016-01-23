@@ -34,21 +34,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     }
     
     // A delegate method for when any app becomes active.
-    func anAppDidBecomeActive(app: Application) {
+    func anAppBecameActive(app: Application) {
         print("Active app: \(app.name) - \(app.bundleID)")
     }
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        
         // Populate the collection with data from previous run.
         if let content = NSUserDefaults().objectForKey("CopiedStrings") as? [String:[AnyObject]] {
-            for (copiedString, items) in content {
+            for (theString, items) in content {
                 if let bundle = items[0] as? String,
                     name = items[1] as? String,
                     date = items[2] as? Int {
                     let aa = Application(name: name, bundleID: bundle)
                     let d = NSDate(timeIntervalSince1970: NSTimeInterval(date))
-                    watcher.copiedStrings.append(date: d, content: copiedString, source: aa)
+                    watcher.copiedStrings.append(CopiedString(theString, source: aa, date: d))
                     watcher.knownApps.insert(aa)
                 }
             }

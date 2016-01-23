@@ -42,8 +42,8 @@ class CopiedStringsCollection {
     }
     
     // For convenience.
-    func append(date date: NSDate, content: String, source: Application) {
-        append(CopiedString(date: date, content: content, source: source))
+    func append(content: String, source: Application) {
+        append(CopiedString(content, source: source))
     }
     
     // We will need those later...

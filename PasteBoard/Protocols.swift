@@ -14,7 +14,7 @@ protocol PasteboardWatcherDelegate {
     func newlyCopiedStringObtained(copied: CopiedString)
     
     // A delegate method for when any app becomes active.
-    func anAppDidBecomeActive(app: Application)
+    func anAppBecameActive(app: Application)
     
 }
 

@@ -83,7 +83,11 @@ class CopiedStringsCollection {
     
     // All items sorted by creation date.
     var sortedItems: [CopiedString] {
-        return collection.sort { $0.date < $1.date }
+        return collection.sort { $0.date > $1.date }
+    }
+    
+    func sortCollection() {
+        collection.sortInPlace { $0.date > $1.date }
     }
     
 }

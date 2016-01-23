@@ -17,27 +17,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     // Contains the polling timer, known apps, the active app, and of course the copied strings.
     let watcher = PasteboardWatcher.sharedInstance
     
-    // A delegate method for when a String has been copied.
-    func newlyCopiedStringObtained(copied: CopiedString) {
-        print(copied.source.name)
-        print(copied.date)
-        print(copied.content)
-        if !copied.URLs.isEmpty {
-            print(copied.URLs)
-        }
-        print("---")
-        print(watcher.copiedStrings.sortedItems)
-        print(watcher.copiedStrings.allItems.count)
-        print("---")
-        print(watcher.knownApps)
-        print("\n***\n")
-    }
-    
-    // A delegate method for when any app becomes active.
     func anAppBecameActive(app: Application) {
         print("Active app: \(app.name) - \(app.bundleID)")
     }
-
+    
+    func newlyCopiedStringObtained(copied: CopiedString) {
+        print(copied.source.name)
+        print(copied.date)
+        if !copied.URLs.isEmpty {
+            print(copied.URLs)
+        }
+        print(watcher.copiedStrings.allItems)
+        print("***")
+    }
+    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Populate the collection with data from previous run.
         if let content = NSUserDefaults().objectForKey("CopiedStrings") as? [String:[AnyObject]] {
@@ -51,6 +44,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
                     watcher.knownApps.insert(aa)
                 }
             }
+            watcher.copiedStrings.sortCollection()
         }
         
         // Populate the forbidden applications.

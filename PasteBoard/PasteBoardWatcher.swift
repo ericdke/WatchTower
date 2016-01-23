@@ -17,6 +17,8 @@ class PasteboardWatcher: NSObject {
     
     var delegate: PasteboardWatcherDelegate?
     
+    var pbtvDelegate: PBTableViewDelegate?
+    
     // Keep track of the changes in the pasteboard.
     private var changeCount: Int
     
@@ -31,7 +33,8 @@ class PasteboardWatcher: NSObject {
     
     // Applications we won't copy from.
     var forbiddenApps = [Application(name: "1Password", bundleID: "com.agilebits.onepassword-osx"),
-                         Application(name: "1Pasword mini", bundleID: "2BUA8C4S2C.com.agilebits.onepassword-osx-helper")]
+                         Application(name: "1Pasword mini", bundleID: "2BUA8C4S2C.com.agilebits.onepassword-osx-helper"),
+                         Application(name: "Keychain Access", bundleID: "com.apple.keychainaccess")]
     
     // The collection of copied strings.
     let copiedStrings = CopiedStringsCollection()
@@ -70,7 +73,7 @@ class PasteboardWatcher: NSObject {
     // Regularly polls the general pasteboard to see if there's been changes.
     // Not very pretty, but even Apple does it like this, so let's go.
     func startPolling() {
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "checkForChangesInPasteboard", userInfo: nil, repeats: true)
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: "checkForChangesInPasteboard", userInfo: nil, repeats: true)
     }
     
     // Called by the timer.
@@ -79,27 +82,19 @@ class PasteboardWatcher: NSObject {
     // - Appends new strings to "copiedStrings".
     // - Calls the delegate.
     // Has to be marked @objc because it's private *and* called by NSTimer.
-    // TODO: Learn to also copy other types than Strings.
     @objc private func checkForChangesInPasteboard() {
         if pasteboard.changeCount != changeCount {
             
             changeCount = pasteboard.changeCount
             
             print(pasteboard.types!)
-//            if let test = pasteboard.stringForType("public.utf8-plain-text") {
-//                print(test)
-//            } else {
-//                print("no")
-//            }
-//          
 
             // Get a string. If it is an URL or contains URLs it will be managed by the final object.
             // NSPasteboardTypeString would be ideal but is forbidden with Sandbox (damn you Sandbox).
-            if let copiedString = pasteboard.stringForType("public.utf8-plain-text") {
+            if let copiedString = pasteboard.stringForType(NSStringPboardType) {
                 foundAString(copiedString)
             // Because WIP and fuck DRY for once...
-            // This one looks equivalent and looks like is not forbidden.
-            } else if let copiedString = pasteboard.stringForType(NSStringPboardType) {
+            } else if let copiedString = pasteboard.stringForType("public.utf8-plain-text") {
                 foundAString(copiedString)
             // Better than nothing, eh.
             } else if let copiedString = pasteboard.stringForType("public.utf16-external-plain-text") {
@@ -107,18 +102,15 @@ class PasteboardWatcher: NSObject {
             }
             
             // Get a filename (or a multiple selection of filenames) with full path.
-            if let plist = pasteboard.propertyListForType(NSFilenamesPboardType),
-                paths = plist as? [String] {
-                    for path in paths {
-                        foundAString(path)
-                    }
+            if let paths = pasteboard.propertyListForType(NSFilenamesPboardType) as? [String] {
+                for path in paths {
+                    foundAString(path)
+                }
             }
             
             // Get an image or a multiple selection of images.
             if let images = pasteboard.readObjectsForClasses([NSImage.self], options: nil) as? [NSImage] {
-                for image in images {
-                    foundAnImage(image)
-                }
+                images.forEach { foundAnImage($0) }
             }
         }
     }
@@ -126,9 +118,14 @@ class PasteboardWatcher: NSObject {
     private func foundAString(string: String) {
         if let source = activeApp where !forbiddenApps.contains(source) {
             let st = CopiedString(string, source: source)
-            copiedStrings.append(st)
+            copiedStrings.insert(st)
             if let delegate = delegate {
                 delegate.newlyCopiedStringObtained(st)
+            } else {
+                fatalError() // WIP
+            }
+            if let delegate = pbtvDelegate {
+                delegate.anObjectWasCopied()
             } else {
                 fatalError() // WIP
             }
@@ -137,7 +134,12 @@ class PasteboardWatcher: NSObject {
     
     private func foundAnImage(image: NSImage) {
         if let source = activeApp where !forbiddenApps.contains(source) {
-            copiedImages.append(CopiedImage(image, source: source))
+            copiedImages.insert(CopiedImage(image, source: source))
+            if let delegate = pbtvDelegate {
+                delegate.anObjectWasCopied()
+            } else {
+                fatalError() // WIP
+            }
         }
     }
     

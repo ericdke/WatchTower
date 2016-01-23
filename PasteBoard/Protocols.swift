@@ -18,6 +18,12 @@ protocol PasteboardWatcherDelegate {
     
 }
 
+protocol PBTableViewDelegate {
+    
+    func anObjectWasCopied()
+    
+}
+
 protocol RepresentsAnApplication {
     
     var name: String { get set }

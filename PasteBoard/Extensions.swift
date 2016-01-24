@@ -8,22 +8,6 @@
 
 import Foundation
 
-// MARK: NSDate
-
-extension NSDate: Comparable { }
-
-public func <(lhs: NSDate, rhs: NSDate) -> Bool {
-    return lhs.compare(rhs) == .OrderedAscending
-}
-
-public func >(lhs: NSDate, rhs: NSDate) -> Bool {
-    return lhs.compare(rhs) == .OrderedDescending
-}
-
-public func ==(lhs: NSDate, rhs: NSDate) -> Bool {
-    return lhs.isEqualToDate(rhs)
-}
-
 // MARK: String
 
 extension String {
@@ -46,19 +30,7 @@ extension String {
     }
 }
 
-// MARK: Application
 
-func ==(lhs: Application, rhs: Application) -> Bool {
-    return lhs.hashValue == rhs.hashValue
-}
-
-func <(lhs: Application, rhs: Application) -> Bool {
-    return lhs.hashValue < rhs.hashValue
-}
-
-func >(lhs: Application, rhs: Application) -> Bool {
-    return lhs.hashValue > rhs.hashValue
-}
 
 
 

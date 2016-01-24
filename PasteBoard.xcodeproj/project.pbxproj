@@ -18,6 +18,7 @@
 		C74609FF1C4D716000B6C200 /* ModelApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = C74609FE1C4D716000B6C200 /* ModelApplication.swift */; };
 		C7460A031C4EB3D800B6C200 /* CopiedStringsCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7460A021C4EB3D800B6C200 /* CopiedStringsCollection.swift */; };
 		C75C52C01C54365E00F3F93B /* PBMainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75C52BF1C54365E00F3F93B /* PBMainTableViewController.swift */; };
+		C75C52C21C552B1000F3F93B /* Comparators.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75C52C11C552B1000F3F93B /* Comparators.swift */; };
 		C7E99BEB1C5189A7002179E3 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E99BEA1C5189A7002179E3 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,7 @@
 		C74609FE1C4D716000B6C200 /* ModelApplication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelApplication.swift; sourceTree = "<group>"; };
 		C7460A021C4EB3D800B6C200 /* CopiedStringsCollection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CopiedStringsCollection.swift; sourceTree = "<group>"; };
 		C75C52BF1C54365E00F3F93B /* PBMainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PBMainTableViewController.swift; sourceTree = "<group>"; };
+		C75C52C11C552B1000F3F93B /* Comparators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comparators.swift; sourceTree = "<group>"; };
 		C7E99BEA1C5189A7002179E3 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -79,6 +81,7 @@
 				C74609FC1C4D714B00B6C200 /* ModelCopiedString.swift */,
 				C71533B01C52F4F600E26956 /* ModelCopiedImage.swift */,
 				C7E99BEA1C5189A7002179E3 /* Extensions.swift */,
+				C75C52C11C552B1000F3F93B /* Comparators.swift */,
 				C74609FA1C4D712200B6C200 /* Protocols.swift */,
 				06D7AEAF1C4CF9040017FD1B /* Assets.xcassets */,
 				06D7AEB11C4CF9040017FD1B /* MainMenu.xib */,
@@ -165,6 +168,7 @@
 				C74609FB1C4D712200B6C200 /* Protocols.swift in Sources */,
 				C71533B11C52F4F600E26956 /* ModelCopiedImage.swift in Sources */,
 				C7460A031C4EB3D800B6C200 /* CopiedStringsCollection.swift in Sources */,
+				C75C52C21C552B1000F3F93B /* Comparators.swift in Sources */,
 				06D7AEAE1C4CF9040017FD1B /* AppDelegate.swift in Sources */,
 				C7E99BEB1C5189A7002179E3 /* Extensions.swift in Sources */,
 				C71533B31C52FC1B00E26956 /* CopiedImagesCollection.swift in Sources */,

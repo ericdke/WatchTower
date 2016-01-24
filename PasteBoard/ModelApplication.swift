@@ -9,6 +9,7 @@
 import Cocoa
 
 // An active application seen by ours.
+// Compared by bundleID.
 struct Application: Hashable, Equatable, CustomStringConvertible, RepresentsAnApplication {
     
     var name: String

@@ -53,7 +53,7 @@ class PasteboardWatcher: NSObject {
     }
     
     // Called by NSWorkspace when any application becomes active or comes frontmost.
-    func activeApp(sender: NSNotification) {
+    @objc private func activeApp(sender: NSNotification) {
         if let info = sender.userInfo,
             content = info[NSWorkspaceApplicationKey],
             _name = content.localizedName, _bundle = content.bundleIdentifier,
@@ -79,9 +79,8 @@ class PasteboardWatcher: NSObject {
     // Called by the timer.
     // If there's been a change in the general pasteboard:
     // - If the active application is forbidden: only updates the count.
-    // - Appends new strings to "copiedStrings".
+    // - Appends new items to the collections.
     // - Calls the delegate.
-    // Has to be marked @objc because it's private *and* called by NSTimer.
     @objc private func checkForChangesInPasteboard() {
         if pasteboard.changeCount != changeCount {
             
@@ -103,9 +102,7 @@ class PasteboardWatcher: NSObject {
             
             // Get a filename (or a multiple selection of filenames) with full path.
             if let paths = pasteboard.propertyListForType(NSFilenamesPboardType) as? [String] {
-                for path in paths {
-                    foundAString(path)
-                }
+                paths.forEach { foundAString($0) }
             }
             
             // Get an image or a multiple selection of images.

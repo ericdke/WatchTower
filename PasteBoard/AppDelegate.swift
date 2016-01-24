@@ -13,6 +13,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
 
     @IBOutlet weak var window: NSWindow!
     
+    @IBOutlet weak var mainTable: NSTableView!
+    
+    
     // Singleton instance of the pasteboard monitor (the "watcher").
     // Contains the polling timer, known apps, the active app, and of course the copied strings.
     let watcher = PasteboardWatcher.sharedInstance
@@ -57,10 +60,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
             }
         }
         
+        // Recalls the windows positions.
+        window.setFrameUsingName("MainWindow")
+        
+        // Sets self as the delegate for the watcher.
         watcher.delegate = self
         
         // Start watching the general pasteboard.
         watcher.startPolling()
+        
+        // The table shows previous copied items at launch.
+        mainTable.reloadData()
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -79,6 +89,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
             fapps[app.bundleID] = app.name
         }
         NSUserDefaults().setObject(fapps, forKey: "ForbiddenApps")
+        
+        // Save the windows positions.
+        window.saveFrameUsingName("MainWindow")
     }
 
 

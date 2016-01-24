@@ -14,6 +14,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="PasteBoard" customModuleProvider="target">
             <connections>
+                <outlet property="mainTable" destination="5Z8-ZQ-cPi" id="UVd-Ha-RSh"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -681,13 +682,13 @@
                 <rect key="frame" x="0.0" y="0.0" width="568" height="552"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="38" horizontalPageScroll="10" verticalLineScroll="38" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="acv-5R-SWc">
+                    <scrollView autohidesScrollers="YES" horizontalLineScroll="49" horizontalPageScroll="10" verticalLineScroll="49" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="acv-5R-SWc">
                         <rect key="frame" x="-1" y="-1" width="570" height="533"/>
-                        <clipView key="contentView" ambiguous="YES" id="v2x-t3-f8D">
+                        <clipView key="contentView" id="v2x-t3-f8D">
                             <rect key="frame" x="1" y="1" width="568" height="516"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="36" rowSizeStyle="automatic" viewBased="YES" id="5Z8-ZQ-cPi">
+                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="47" rowSizeStyle="automatic" viewBased="YES" id="5Z8-ZQ-cPi">
                                     <rect key="frame" x="0.0" y="0.0" width="569" height="516"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -708,11 +709,14 @@
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
                                                 <tableCellView id="E9R-qf-p1H">
-                                                    <rect key="frame" x="1" y="1" width="565" height="36"/>
+                                                    <rect key="frame" x="1" y="1" width="565" height="47"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dmw-et-YJY">
-                                                            <rect key="frame" x="0.0" y="-3" width="564" height="39"/>
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="dmw-et-YJY">
+                                                            <rect key="frame" x="0.0" y="4" width="564" height="39"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" constant="39" id="zhV-4s-WgV"/>
+                                                            </constraints>
                                                             <textFieldCell key="cell" truncatesLastVisibleLine="YES" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Table View Cell" id="EGI-QX-VNZ">
                                                                 <font key="font" metaFont="system" size="14"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -720,6 +724,11 @@
                                                             </textFieldCell>
                                                         </textField>
                                                     </subviews>
+                                                    <constraints>
+                                                        <constraint firstAttribute="trailing" secondItem="dmw-et-YJY" secondAttribute="trailing" constant="3" id="lW2-5B-wTT"/>
+                                                        <constraint firstItem="dmw-et-YJY" firstAttribute="centerX" secondItem="E9R-qf-p1H" secondAttribute="centerX" id="rFu-Bn-Tsl"/>
+                                                        <constraint firstItem="dmw-et-YJY" firstAttribute="centerY" secondItem="E9R-qf-p1H" secondAttribute="centerY" id="uTX-QO-vkK"/>
+                                                    </constraints>
                                                     <connections>
                                                         <outlet property="textField" destination="dmw-et-YJY" id="8gi-s6-kOr"/>
                                                     </connections>
@@ -745,6 +754,12 @@
                         </scroller>
                     </scrollView>
                 </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="acv-5R-SWc" secondAttribute="bottom" constant="-1" id="BoS-b8-Tko"/>
+                    <constraint firstAttribute="trailing" secondItem="acv-5R-SWc" secondAttribute="trailing" constant="-1" id="b4Y-sS-EDb"/>
+                    <constraint firstItem="acv-5R-SWc" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="nNg-6m-dJP"/>
+                    <constraint firstItem="acv-5R-SWc" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="-1" id="oIA-AN-ZPe"/>
+                </constraints>
             </view>
             <point key="canvasLocation" x="179" y="476"/>
         </window>

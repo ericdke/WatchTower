@@ -16,7 +16,7 @@ class CopiedStringsCollection {
     var limit:Int
     
     // Init with a maximum number of items or let it use the default value.
-    init(limit: Int = 20) {
+    init(limit: Int = 50) {
         self.limit = limit
     }
     
@@ -27,7 +27,7 @@ class CopiedStringsCollection {
     // Removes the last item before inserting if the collection is full.
     // Only inserts if not previously inserted at this index or if collection is empty.
     func insert(string: CopiedString) {
-        if let one = first where string.content != one.content {
+        if let one = first where string != one {
             insertString(string)
         } else if collection.isEmpty {
             insertString(string)
@@ -44,7 +44,7 @@ class CopiedStringsCollection {
     // Removes the first item before appending if the collection is full.
     // Only appends if not previously appended at this index or if collection is empty.
     func append(string: CopiedString) {
-        if let end = last where string.content != end.content {
+        if let end = last where string != end {
             appendString(string)
         } else if collection.isEmpty {
             appendString(string)

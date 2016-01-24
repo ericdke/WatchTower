@@ -9,7 +9,8 @@
 import Cocoa
 
 // An object for the newly copied image.
-struct CopiedImage: CustomStringConvertible {
+// Compared by content.
+struct CopiedImage: Hashable, Equatable, CustomStringConvertible {
     
     // Date and time of copy.
     let date:NSDate
@@ -28,6 +29,10 @@ struct CopiedImage: CustomStringConvertible {
     
     var description: String {
         return "\"\(content.description)\" - \(source.name) - \(date)"
+    }
+    
+    var hashValue: Int {
+        return content.hashValue
     }
     
 }

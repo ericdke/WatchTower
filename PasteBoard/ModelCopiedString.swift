@@ -8,8 +8,9 @@
 
 import Foundation
 
-// An object for the newly copied strings
-struct CopiedString: CustomStringConvertible {
+// An object for the newly copied strings.
+// Compared by content.
+struct CopiedString: Hashable, Equatable, CustomStringConvertible {
     
     // Date and time of copy.
     let date:NSDate
@@ -32,6 +33,10 @@ struct CopiedString: CustomStringConvertible {
     
     var description: String {
         return "\"\(content)\" - \(source.name) - \(date)"
+    }
+    
+    var hashValue: Int {
+        return content.hashValue
     }
     
 }

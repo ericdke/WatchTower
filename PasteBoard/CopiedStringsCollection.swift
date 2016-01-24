@@ -25,7 +25,15 @@ class CopiedStringsCollection {
     
     // Insert a CopiedString.
     // Removes the last item before inserting if the collection is full.
+    // Only inserts if not previously inserted at this index or if collection is empty.
     func insert(string: CopiedString) {
+        if let one = first where string.content != one.content {
+            insertString(string)
+        } else if collection.isEmpty {
+            insertString(string)
+        }
+    }
+    private func insertString(string: CopiedString) {
         if collection.count >= limit {
             collection.removeLast()
         }
@@ -34,7 +42,15 @@ class CopiedStringsCollection {
     
     // Append a CopiedString.
     // Removes the first item before appending if the collection is full.
+    // Only appends if not previously appended at this index or if collection is empty.
     func append(string: CopiedString) {
+        if let end = last where string.content != end.content {
+            appendString(string)
+        } else if collection.isEmpty {
+            appendString(string)
+        }
+    }
+    private func appendString(string: CopiedString) {
         if collection.count >= limit {
             collection.removeFirst()
         }

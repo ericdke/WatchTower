@@ -13,7 +13,7 @@ import Cocoa
 struct CopiedImage: Hashable, Equatable, CustomStringConvertible {
     
     // Date and time of copy.
-    let date:NSDate
+    let date:Date
     
     // The copied image.
     let content:NSImage
@@ -21,7 +21,7 @@ struct CopiedImage: Hashable, Equatable, CustomStringConvertible {
     // The active application when the image was copied.
     let source:Application
     
-    init(_ content: NSImage, source: Application, date: NSDate = NSDate()) {
+    init(_ content: NSImage, source: Application, date: Date = Date()) {
         self.date = date
         self.content = content
         self.source = source

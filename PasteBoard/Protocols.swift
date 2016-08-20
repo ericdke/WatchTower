@@ -11,10 +11,10 @@ import Cocoa
 protocol PasteboardWatcherDelegate {
 
     // A delegate for when a String has been copied.
-    func newlyCopiedStringObtained(copied: CopiedString)
+    func newlyCopiedStringObtained(_ copied: CopiedString)
     
     // A delegate method for when any app becomes active.
-    func anAppBecameActive(app: Application)
+    func anAppBecameActive(_ app: Application)
     
 }
 

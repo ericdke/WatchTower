@@ -21,36 +21,36 @@ class CopiedStringsCollection {
     }
     
     // The private array of CopiedStrings.
-    private var collection = [CopiedString]()
+    fileprivate var collection = [CopiedString]()
     
     // Insert a CopiedString.
     // Removes the last item before inserting if the collection is full.
     // Only inserts if not previously inserted at this index or if collection is empty.
-    func insert(string: CopiedString) {
-        if let one = first where string != one {
+    func insert(_ string: CopiedString) {
+        if let one = first , string != one {
             insertString(string)
         } else if collection.isEmpty {
             insertString(string)
         }
     }
-    private func insertString(string: CopiedString) {
+    fileprivate func insertString(_ string: CopiedString) {
         if collection.count >= limit {
             collection.removeLast()
         }
-        collection.insert(string, atIndex: 0)
+        collection.insert(string, at: 0)
     }
     
     // Append a CopiedString.
     // Removes the first item before appending if the collection is full.
     // Only appends if not previously appended at this index or if collection is empty.
-    func append(string: CopiedString) {
-        if let end = last where string != end {
+    func append(_ string: CopiedString) {
+        if let end = last , string != end {
             appendString(string)
         } else if collection.isEmpty {
             appendString(string)
         }
     }
-    private func appendString(string: CopiedString) {
+    fileprivate func appendString(_ string: CopiedString) {
         if collection.count >= limit {
             collection.removeFirst()
         }
@@ -58,13 +58,13 @@ class CopiedStringsCollection {
     }
     
     // For convenience.
-    func append(content: String, source: Application) {
+    func append(_ content: String, source: Application) {
         append(CopiedString(content, source: source))
     }
     
     // We will need those later...
-    func removeAtIndex(index: Int) {
-        collection.removeAtIndex(index)
+    func removeAtIndex(_ index: Int) {
+        collection.remove(at: index)
     }
     
     func removeFirst() {
@@ -84,7 +84,7 @@ class CopiedStringsCollection {
     }
     
     // Safe way to retrieve an item: returns an Optional.
-    func getAtIndex(index: Int) -> CopiedString? {
+    func getAtIndex(_ index: Int) -> CopiedString? {
         if collection.count > index {
             return collection[index]
         }
@@ -99,11 +99,11 @@ class CopiedStringsCollection {
     
     // All items sorted by creation date.
     var sortedItems: [CopiedString] {
-        return collection.sort { $0.date > $1.date }
+        return collection.sorted { $0.date > $1.date }
     }
     
     func sortCollection() {
-        collection.sortInPlace { $0.date > $1.date }
+        collection.sort { $0.date > $1.date }
     }
     
 }

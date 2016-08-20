@@ -13,7 +13,7 @@ import Foundation
 struct CopiedString: Hashable, Equatable, CustomStringConvertible {
     
     // Date and time of copy.
-    let date:NSDate
+    let date:Date
     
     // The copied String.
     let content:String
@@ -22,9 +22,9 @@ struct CopiedString: Hashable, Equatable, CustomStringConvertible {
     let source:Application
     
     // If the content contains URLs, this array will be populated.
-    let URLs: [NSURL]
+    let URLs: [URL]
     
-    init(_ content: String, source: Application, date: NSDate = NSDate()) {
+    init(_ content: String, source: Application, date: Date = Date()) {
         self.date = date
         self.content = content
         self.source = source
@@ -39,4 +39,7 @@ struct CopiedString: Hashable, Equatable, CustomStringConvertible {
         return content.hashValue
     }
     
+    
+    
 }
+

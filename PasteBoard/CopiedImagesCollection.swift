@@ -16,28 +16,28 @@ class CopiedImagesCollection {
         self.limit = limit
     }
     
-    private var collection = [CopiedImage]()
+    fileprivate var collection = [CopiedImage]()
     
-    func insert(image: CopiedImage) {
+    func insert(_ image: CopiedImage) {
         if collection.count >= limit {
             collection.removeLast()
         }
-        collection.insert(image, atIndex: 0)
+        collection.insert(image, at: 0)
     }
     
-    func append(image: CopiedImage) {
+    func append(_ image: CopiedImage) {
         if collection.count >= limit {
             collection.removeFirst()
         }
         collection.append(image)
     }
     
-    func append(content: NSImage, source: Application) {
+    func append(_ content: NSImage, source: Application) {
         append(CopiedImage(content, source: source))
     }
     
-    func removeAtIndex(index: Int) {
-        collection.removeAtIndex(index)
+    func removeAtIndex(_ index: Int) {
+        collection.remove(at: index)
     }
     
     func removeFirst() {
@@ -56,7 +56,7 @@ class CopiedImagesCollection {
         return collection.last
     }
     
-    func getAtIndex(index: Int) -> CopiedImage? {
+    func getAtIndex(_ index: Int) -> CopiedImage? {
         if collection.count > index {
             return collection[index]
         }
@@ -68,7 +68,7 @@ class CopiedImagesCollection {
     }
     
     var sortedItems: [CopiedImage] {
-        return collection.sort { $0.date < $1.date }
+        return collection.sorted { $0.date < $1.date }
     }
     
 }

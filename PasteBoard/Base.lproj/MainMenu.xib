@@ -717,7 +717,7 @@
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="39" id="zhV-4s-WgV"/>
                                                             </constraints>
-                                                            <textFieldCell key="cell" truncatesLastVisibleLine="YES" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Table View Cell" id="EGI-QX-VNZ">
+                                                            <textFieldCell key="cell" truncatesLastVisibleLine="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Table View Cell" id="EGI-QX-VNZ">
                                                                 <font key="font" metaFont="system" size="14"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -737,6 +737,8 @@
                                         </tableColumn>
                                     </tableColumns>
                                     <connections>
+                                        <action selector="onAction:" target="mZG-Nz-dyc" id="bXl-9N-x27"/>
+                                        <action trigger="doubleAction" selector="onDoubleAction:" target="mZG-Nz-dyc" id="AFV-iX-sc9"/>
                                         <outlet property="dataSource" destination="mZG-Nz-dyc" id="NFC-Kd-PRn"/>
                                         <outlet property="delegate" destination="mZG-Nz-dyc" id="xLE-kb-g3u"/>
                                     </connections>

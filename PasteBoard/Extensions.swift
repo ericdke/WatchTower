@@ -11,15 +11,16 @@ import Foundation
 // MARK: String
 
 extension String {
-    func extractURLs() -> [NSURL] {
-        var urls : [NSURL] = []
+    
+    func extractURLs() -> [URL] {
+        var urls : [URL] = []
         do {
-            let detector = try NSDataDetector(types: NSTextCheckingType.Link.rawValue)
-            detector.enumerateMatchesInString(self,
+            let detector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+            detector.enumerateMatches(in: self,
                 options: [],
                 range: NSMakeRange(0, self.characters.count),
-                usingBlock: { (result, _, _) in
-                    if let match = result, url = match.URL {
+                using: { (result, _, _) in
+                    if let match = result, let url = match.url {
                         urls.append(url)
                     }
             })
@@ -28,8 +29,14 @@ extension String {
         }
         return urls
     }
+    
+    func shortVersion(_ limit: Int) -> String {
+        if self.characters.count > limit {
+            return self.characters.map { String($0) }[0...(limit - 3)].joined(separator: "") + "..."
+        }
+        return self
+    }
 }
-
 
 
 

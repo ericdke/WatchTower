@@ -24,7 +24,7 @@ struct CopiedString: Hashable, Equatable, CustomStringConvertible {
     // If the content contains URLs, this array will be populated.
     let URLs: [URL]
     
-    init(_ content: String, source: Application, date: Date = Date()) {
+    init(content: String, source: Application, date: Date = Date()) {
         self.date = date
         self.content = content
         self.source = source

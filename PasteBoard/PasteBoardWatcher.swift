@@ -34,25 +34,32 @@ class PasteboardWatcher {
     var activeApp:Application?
     
     // Applications we won't copy from.
-    var forbiddenApps = [Application(name: "1Password", bundleID: "com.agilebits.onepassword-osx"),
-                         Application(name: "1Pasword mini", bundleID: "2BUA8C4S2C.com.agilebits.onepassword-osx-helper"),
-                         Application(name: "Keychain Access", bundleID: "com.apple.keychainaccess"),
-                         Application(name: "WatchTower", bundleID: "com.tests.PasteBoard")] // Us! Temporary.
+    var forbiddenApps = [Application(name: "1Password",
+                                     bundleID: "com.agilebits.onepassword-osx"),
+                         Application(name: "1Pasword mini",
+                                     bundleID: "2BUA8C4S2C.com.agilebits.onepassword-osx-helper"),
+                         Application(name: "Keychain Access",
+                                     bundleID: "com.apple.keychainaccess"),
+                         Application(name: "WatchTower",
+                                     bundleID: "com.tests.PasteBoard")] // This is us! Temporary.
     
     // The collection of copied strings.
-    let copiedStrings = CopiedStringsCollection()
+    let strings = CopiedStringsCollection()
     
     // The collection of copied images.
-    let copiedImages = CopiedImagesCollection()
+    let images = CopiedImagesCollection()
     
     // MARK: INIT
     
-    private init() {
+    private init() { // private because singleton
         // On launch, we mirror the pasteboard context.
         self.changeCount = pasteboard.changeCount
         
         // Registers if any application becomes active (or comes frontmost) and calls a method if it's the case.
-        NSWorkspace.shared().notificationCenter.addObserver(self, selector: #selector(PasteboardWatcher.activeApp(_:)), name: NSNotification.Name.NSWorkspaceDidActivateApplication, object: nil)
+        NSWorkspace.shared().notificationCenter.addObserver(self,
+                                                            selector: #selector(PasteboardWatcher.activeApp(_:)),
+                                                            name: NSNotification.Name.NSWorkspaceDidActivateApplication,
+                                                            object: nil)
     }
     
     // MARK: WATCHER
@@ -62,9 +69,11 @@ class PasteboardWatcher {
         if let info = (sender as NSNotification).userInfo,
             let ak = info[NSWorkspaceApplicationKey] {
             let content = ak as AnyObject
-            if let _name = content.localizedName, let _bundle = content.bundleIdentifier,
-                let name = _name, let bundle = _bundle {
-                let aa = Application(name: name, bundleID: bundle)
+            if let _name = content.localizedName,
+                    let _bundle = content.bundleIdentifier,
+                    let name = _name, let bundle = _bundle {
+                let aa = Application(name: name,
+                                     bundleID: bundle)
                 activeApp = aa
                 knownApps.insert(aa)
                 if let delegate = delegate {
@@ -80,7 +89,11 @@ class PasteboardWatcher {
     // Regularly polls the general pasteboard to see if there's been changes.
     // Not very pretty, but even Apple does it like this, so let's go.
     func startPolling() {
-        self.timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(PasteboardWatcher.checkForChangesInPasteboard), userInfo: nil, repeats: true)
+        self.timer = Timer.scheduledTimer(timeInterval: 0.2,
+                                          target: self,
+                                          selector: #selector(PasteboardWatcher.checkForChangesInPasteboard),
+                                          userInfo: nil,
+                                          repeats: true)
     }
     
     // MARK: GET
@@ -94,37 +107,35 @@ class PasteboardWatcher {
         if pasteboard.changeCount != changeCount {
             
             changeCount = pasteboard.changeCount
-            
-//            print(pasteboard.types!)
 
             // Get a string. If it is an URL or contains URLs it will be managed by the final object.
             // NSPasteboardTypeString would be ideal but is forbidden with Sandbox (damn you Sandbox).
             if let copiedString = pasteboard.string(forType: NSStringPboardType) {
-                foundAString(copiedString)
+                found(string: copiedString)
             // Because WIP and fuck DRY for once...
             } else if let copiedString = pasteboard.string(forType: "public.utf8-plain-text") {
-                foundAString(copiedString)
+                found(string: copiedString)
             // Better than nothing, eh.
             } else if let copiedString = pasteboard.string(forType: "public.utf16-external-plain-text") {
-                foundAString(copiedString)
+                found(string: copiedString)
             }
             
             // Get a filename (or a multiple selection of filenames) with full path.
             if let paths = pasteboard.propertyList(forType: NSFilenamesPboardType) as? [String] {
-                paths.forEach { foundAString($0) }
+                paths.forEach { found(string: $0) }
             }
             
             // Get an image or a multiple selection of images.
             if let images = pasteboard.readObjects(forClasses: [NSImage.self], options: nil) as? [NSImage] {
-                images.forEach { foundAnImage($0) }
+                images.forEach { found(image: $0) }
             }
         }
     }
     
-    fileprivate func foundAString(_ string: String) {
+    fileprivate func found(string: String) {
         if let source = activeApp , !forbiddenApps.contains(source) {
-            let st = CopiedString(string, source: source)
-            copiedStrings.insert(st)
+            let st = CopiedString(content: string, source: source)
+            strings.insert(st)
             if let delegate = delegate {
                 delegate.newlyCopiedStringObtained(st)
             } else {
@@ -138,9 +149,9 @@ class PasteboardWatcher {
         }
     }
     
-    fileprivate func foundAnImage(_ image: NSImage) {
+    fileprivate func found(image: NSImage) {
         if let source = activeApp , !forbiddenApps.contains(source) {
-            copiedImages.insert(CopiedImage(image, source: source))
+            images.insert(CopiedImage(content: image, source: source))
             if let delegate = pbtvDelegate {
                 delegate.anObjectWasCopied()
             } else {
@@ -151,7 +162,7 @@ class PasteboardWatcher {
     
     // MARK: SET
     
-    func setAString(_ content: String) -> (NSSPT: Bool, UTF8: Bool, UTF16: Bool) {
+    func set(string content: String) -> (NSSPT: Bool, UTF8: Bool, UTF16: Bool) {
         // Returns the new pasteboard's changeCount: ignored, we already have this managed.
         let _ = pasteboard.declareTypes([NSStringPboardType, "public.utf8-plain-text", "public.utf16-external-plain-text"], owner: nil)
         // Write the string to the general pasteboard in compatible formats.

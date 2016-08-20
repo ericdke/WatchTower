@@ -28,12 +28,12 @@ class CopiedStringsCollection {
     // Only inserts if not previously inserted at this index or if collection is empty.
     func insert(_ string: CopiedString) {
         if let one = first , string != one {
-            insertString(string)
+            _insert(string)
         } else if collection.isEmpty {
-            insertString(string)
+            _insert(string)
         }
     }
-    fileprivate func insertString(_ string: CopiedString) {
+    fileprivate func _insert(_ string: CopiedString) {
         if collection.count >= limit {
             collection.removeLast()
         }
@@ -45,12 +45,12 @@ class CopiedStringsCollection {
     // Only appends if not previously appended at this index or if collection is empty.
     func append(_ string: CopiedString) {
         if let end = last , string != end {
-            appendString(string)
+            _append(string)
         } else if collection.isEmpty {
-            appendString(string)
+            _append(string)
         }
     }
-    fileprivate func appendString(_ string: CopiedString) {
+    fileprivate func _append(_ string: CopiedString) {
         if collection.count >= limit {
             collection.removeFirst()
         }
@@ -59,11 +59,11 @@ class CopiedStringsCollection {
     
     // For convenience.
     func append(_ content: String, source: Application) {
-        append(CopiedString(content, source: source))
+        append(CopiedString(content: content, source: source))
     }
     
     // We will need those later...
-    func removeAtIndex(_ index: Int) {
+    func remove(at index: Int) {
         collection.remove(at: index)
     }
     
@@ -84,7 +84,7 @@ class CopiedStringsCollection {
     }
     
     // Safe way to retrieve an item: returns an Optional.
-    func getAtIndex(_ index: Int) -> CopiedString? {
+    func get(at index: Int) -> CopiedString? {
         if collection.count > index {
             return collection[index]
         }
@@ -93,16 +93,16 @@ class CopiedStringsCollection {
     
     // All items in the order they were added
     // (they could have been appended or inserted - we will allow moving items in lists).
-    var allItems: [CopiedString] {
+    var all: [CopiedString] {
         return collection
     }
     
     // All items sorted by creation date.
-    var sortedItems: [CopiedString] {
+    var sorted: [CopiedString] {
         return collection.sorted { $0.date > $1.date }
     }
     
-    func sortCollection() {
+    func sort() {
         collection.sort { $0.date > $1.date }
     }
     

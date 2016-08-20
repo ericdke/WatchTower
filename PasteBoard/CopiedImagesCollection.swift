@@ -32,11 +32,12 @@ class CopiedImagesCollection {
         collection.append(image)
     }
     
-    func append(_ content: NSImage, source: Application) {
-        append(CopiedImage(content, source: source))
+    // convenience
+    func append(content: NSImage, source: Application) {
+        append(CopiedImage(content: content, source: source))
     }
     
-    func removeAtIndex(_ index: Int) {
+    func remove(at index: Int) {
         collection.remove(at: index)
     }
     
@@ -56,18 +57,18 @@ class CopiedImagesCollection {
         return collection.last
     }
     
-    func getAtIndex(_ index: Int) -> CopiedImage? {
+    func get(at index: Int) -> CopiedImage? {
         if collection.count > index {
             return collection[index]
         }
         return nil
     }
     
-    var allItems: [CopiedImage] {
+    var all: [CopiedImage] {
         return collection
     }
     
-    var sortedItems: [CopiedImage] {
+    var sorted: [CopiedImage] {
         return collection.sorted { $0.date < $1.date }
     }
     

@@ -8,8 +8,6 @@
 
 import Foundation
 
-// MARK: String
-
 extension String {
     
     func extractURLs() -> [URL] {
@@ -30,7 +28,7 @@ extension String {
         return urls
     }
     
-    func shortVersion(_ limit: Int) -> String {
+    func shortVersion(limit: Int) -> String {
         if self.characters.count > limit {
             return self.characters.map { String($0) }[0...(limit - 3)].joined(separator: "") + "..."
         }

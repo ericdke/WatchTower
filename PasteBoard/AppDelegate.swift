@@ -5,6 +5,11 @@
 //  Created by Eric D. on 18/01/2016.
 //  Copyright © 2016 tests. All rights reserved.
 //
+//  Converted to Swift 3 on 20/08/2016.
+
+/*
+ The concept is simple: monitor NSPasteBoard, filter for Strings/Images, get the copieds objects and add them to our own collection. From there, we can handle a list and we can reuse any of these copied objects where we want. We can also ignore copied objects from apps like password managers and persist the list of copied objects between launches.
+ */
 
 import Cocoa
 
@@ -17,7 +22,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     
     
     // Singleton instance of the pasteboard monitor (the "watcher").
-    // Contains the polling timer, known apps, the active app, and of course the copied strings.
+    // Contains the polling timer, the known apps, the currently active app, and of course the copied objects.
     let watcher = PasteboardWatcher.sharedInstance
     
     func anAppBecameActive(_ app: Application) {
@@ -25,7 +30,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     }
     
     func newlyCopiedStringObtained(_ copied: CopiedString) {
-        let msg = "\(copied.date) - \(copied.source.name) - \(copied.content.shortVersion(50))"
+        let msg = "\(copied.date) - \(copied.source.name) - \(copied.content.shortVersion(limit: 50))"
         print(msg)
         if !copied.URLs.isEmpty {
             print(copied.URLs)
@@ -48,11 +53,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
                     let date = items[2] as? Int {
                     let aa = Application(name: name, bundleID: bundle)
                     let d = Date(timeIntervalSince1970: TimeInterval(date))
-                    watcher.copiedStrings.append(CopiedString(theString, source: aa, date: d))
+                    watcher.strings.append(CopiedString(content: theString, source: aa, date: d))
                     watcher.knownApps.insert(aa)
                 }
             }
-            watcher.copiedStrings.sortCollection()
+            watcher.strings.sort()
         }
         
         // Populate the forbidden applications.
@@ -76,11 +81,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
-        // NSUSerDefaults for now - might need to use NSCoding instead later if we add complexity.
+        // USerDefaults for now - might need to use NSCoding instead later if we add complexity.
         
         // Record the current copied strings before quitting.
         let strings = NSMutableDictionary()
-        for app in watcher.copiedStrings.sortedItems {
+        for app in watcher.strings.sorted {
             strings[app.content] = NSArray(array: [app.source.bundleID, app.source.name, Int(app.date.timeIntervalSince1970)])
         }
         UserDefaults().set(strings, forKey: "CopiedStrings")

@@ -21,7 +21,7 @@ struct CopiedImage: Hashable, Equatable, CustomStringConvertible {
     // The active application when the image was copied.
     let source:Application
     
-    init(_ content: NSImage, source: Application, date: Date = Date()) {
+    init(content: NSImage, source: Application, date: Date = Date()) {
         self.date = date
         self.content = content
         self.source = source

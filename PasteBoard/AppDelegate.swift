@@ -41,7 +41,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
     
     func applicationWillFinishLaunching(_ notification: Notification) {
         // Recalls the windows positions.
-        window.setFrameUsingName("MainWindow")
+        window.setFrameUsingName(NSWindow.FrameAutosaveName(rawValue: "MainWindow"))
     }
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -98,7 +98,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, PasteboardWatcherDelegate {
         UserDefaults().set(fapps, forKey: "ForbiddenApps")
         
         // Save the windows positions.
-        window.saveFrame(usingName: "MainWindow")
+        window.saveFrame(usingName: NSWindow.FrameAutosaveName(rawValue: "MainWindow"))
     }
 
 

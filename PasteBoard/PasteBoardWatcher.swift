@@ -15,7 +15,7 @@ class PasteboardWatcher {
     // This class is a Singleton.
     static let sharedInstance = PasteboardWatcher()
     
-    fileprivate let pasteboard = NSPasteboard.general()
+    fileprivate let pasteboard = NSPasteboard.general
     
     var delegate: PasteboardWatcherDelegate?
     
@@ -56,9 +56,9 @@ class PasteboardWatcher {
         self.changeCount = pasteboard.changeCount
         
         // Registers if any application becomes active (or comes frontmost) and calls a method if it's the case.
-        NSWorkspace.shared().notificationCenter.addObserver(self,
+        NSWorkspace.shared.notificationCenter.addObserver(self,
                                                             selector: #selector(PasteboardWatcher.activeApp(_:)),
-                                                            name: NSNotification.Name.NSWorkspaceDidActivateApplication,
+                                                            name: NSWorkspace.didActivateApplicationNotification,
                                                             object: nil)
     }
     
@@ -67,7 +67,7 @@ class PasteboardWatcher {
     // Called by NSWorkspace when any application becomes active or comes frontmost.
     @objc fileprivate func activeApp(_ sender: Notification) {
         if let info = (sender as NSNotification).userInfo,
-            let ak = info[NSWorkspaceApplicationKey] {
+            let ak = info[NSWorkspace.applicationUserInfoKey] {
             let content = ak as AnyObject
             if let _name = content.localizedName,
                     let _bundle = content.bundleIdentifier,
@@ -110,18 +110,18 @@ class PasteboardWatcher {
 
             // Get a string. If it is an URL or contains URLs it will be managed by the final object.
             // NSPasteboardTypeString would be ideal but is forbidden with Sandbox (damn you Sandbox).
-            if let copiedString = pasteboard.string(forType: NSStringPboardType) {
+            if let copiedString = pasteboard.string(forType: NSPasteboard.PasteboardType("NSFilenamesPboardType")) {
                 found(string: copiedString)
             // Because WIP and fuck DRY for once...
-            } else if let copiedString = pasteboard.string(forType: "public.utf8-plain-text") {
+            } else if let copiedString = pasteboard.string(forType: NSPasteboard.PasteboardType(rawValue: "public.utf8-plain-text")) {
                 found(string: copiedString)
             // Better than nothing, eh.
-            } else if let copiedString = pasteboard.string(forType: "public.utf16-external-plain-text") {
+            } else if let copiedString = pasteboard.string(forType: NSPasteboard.PasteboardType(rawValue: "public.utf16-external-plain-text")) {
                 found(string: copiedString)
             }
             
             // Get a filename (or a multiple selection of filenames) with full path.
-            if let paths = pasteboard.propertyList(forType: NSFilenamesPboardType) as? [String] {
+            if let paths = pasteboard.propertyList(forType: NSPasteboard.PasteboardType("NSFilenamesPboardType")) as? [String] {
                 paths.forEach { found(string: $0) }
             }
             
@@ -164,11 +164,11 @@ class PasteboardWatcher {
     
     func set(string content: String) -> (NSSPT: Bool, UTF8: Bool, UTF16: Bool) {
         // Returns the new pasteboard's changeCount: ignored, we already have this managed.
-        let _ = pasteboard.declareTypes([NSStringPboardType, "public.utf8-plain-text", "public.utf16-external-plain-text"], owner: nil)
+        let _ = pasteboard.declareTypes([NSPasteboard.PasteboardType("NSFilenamesPboardType"), NSPasteboard.PasteboardType(rawValue: "public.utf8-plain-text"), NSPasteboard.PasteboardType(rawValue: "public.utf16-external-plain-text")], owner: nil)
         // Write the string to the general pasteboard in compatible formats.
-        let pastedNSSPT = pasteboard.setString(content, forType: NSStringPboardType)
-        let pastedUTF8 = pasteboard.setString(content, forType: "public.utf8-plain-text")
-        let pastedUTF16 = pasteboard.setString(content, forType: "public.utf16-external-plain-text")
+        let pastedNSSPT = pasteboard.setString(content, forType: NSPasteboard.PasteboardType("NSFilenamesPboardType"))
+        let pastedUTF8 = pasteboard.setString(content, forType: NSPasteboard.PasteboardType(rawValue: "public.utf8-plain-text"))
+        let pastedUTF16 = pasteboard.setString(content, forType: NSPasteboard.PasteboardType(rawValue: "public.utf16-external-plain-text"))
         return (pastedNSSPT, pastedUTF8, pastedUTF16)
     }
     

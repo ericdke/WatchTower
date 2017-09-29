@@ -28,7 +28,7 @@ class PBMainTableViewController: NSObject, NSTableViewDataSource, NSTableViewDel
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-        guard let cellView = tableView.make(withIdentifier: "PBMainColumn", owner: self)
+        guard let cellView = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "PBMainColumn"), owner: self)
                 as? NSTableCellView else {
             return nil
         }

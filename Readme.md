@@ -1,7 +1,9 @@
-![](https://img.shields.io/badge/Swift-3-orange.svg?style=flat)
+![](https://img.shields.io/badge/Swift-4-green.svg?style=flat)
 
-A prototype app for OS X, in Swift, for managing a list of copy/paste actions.
+A prototype app for OS X, in Swift, for managing a list of copy/paste actions (clipboard manager).
 
-Copy a String (or an image) anywhere in your Mac and it will be listed in our app, ready to be reused later.
+Copy text and images anywhere in your Mac and they will be added in our app, ready to be reused later.
 
-Works very well, but is incomplete and there's almost no UI except a simple tableview - contributions are welcomed.
+It works very well, and there's already a few goodies, for example ignoring forbidden apps like 1Password, but it's incomplete and there's almost no UI except a simple tableview to list the copied items.
+
+Contributions are welcomed.
